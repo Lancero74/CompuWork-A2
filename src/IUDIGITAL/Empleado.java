@@ -1,65 +1,57 @@
-package IUDIGITAL;
+public abstract class Empleado {
+    protected int idEmpleado;
+    protected String nombre;
+    protected String apellido;  // Nuevo atributo
+    protected String tipoEmpleado;
+    protected Departamento departamento;
 
-public class Empleado {
-    private int id_Empleado;
-    private String Nombre;
-    private String Apellido;
-    private String Tipo_Empleado;
-    private String Fecha_Contratacion;
-
-// constructor
-    public Empleado(int id_Empleado, String nombre,String Apellido,String Tipo_Empleado) {
-        this.id_Empleado = id_Empleado;
-        this.Nombre = nombre;
-        this.Apellido = Apellido;
-        this.Tipo_Empleado = Tipo_Empleado;
-        this.Fecha_Contratacion = Fecha_Contratacion;
-
-    }
-// constructor vacio
-    public Empleado() {
-
-    }
-    // Getters and Setters
-
-    public int getId_Empleado() {
-        return id_Empleado;
+    public Empleado(int idEmpleado, String nombre, String apellido, String tipoEmpleado) {
+        this.idEmpleado = idEmpleado;
+        this.nombre = nombre;
+        this.apellido = apellido;  // Asignación del apellido
+        this.tipoEmpleado = tipoEmpleado;
     }
 
-    public void setId_Empleado(int id_Empleado) {
-        this.id_Empleado = id_Empleado;
+    public void asignarDepartamento(Departamento departamento) {
+        this.departamento = departamento;
     }
 
-    public String getNombre() {
-        return Nombre;
+    public void cambiarDepartamento(Departamento nuevoDepartamento) {
+        this.departamento = nuevoDepartamento;
     }
 
-    public void setNombre(String nombre) {
-        Nombre = nombre;
+    public abstract void generarReporteDesempeño();
+
+    @Override
+    public String toString() {
+        return "ID: " + idEmpleado + ", Nombre: " + nombre + " " + apellido + ", Tipo: " + tipoEmpleado + ", Departamento: " + (departamento != null ? departamento.getNombre() : "Sin departamento");
+    }
+}
+
+class EmpleadoPermanente extends Empleado {
+    private double salario;
+
+    public EmpleadoPermanente(int idEmpleado, String nombre, String apellido, double salario) {
+        super(idEmpleado, nombre, apellido, "Permanente");
+        this.salario = salario;
     }
 
-    public String getApellido() {
-        return Apellido;
+    @Override
+    public void generarReporteDesempeño() {
+        System.out.println("Generar reporte de desempeño para empleado permanente.");
+    }
+}
+
+class EmpleadoTemporal extends Empleado {
+    private double tarifaPorHora;
+
+    public EmpleadoTemporal(int idEmpleado, String nombre, String apellido, double tarifaPorHora) {
+        super(idEmpleado, nombre, apellido, "Temporal");
+        this.tarifaPorHora = tarifaPorHora;
     }
 
-    public void setApellido(String apellido) {
-        Apellido = apellido;
+    @Override
+    public void generarReporteDesempeño() {
+        System.out.println("Generar reporte de desempeño para empleado temporal.");
     }
-
-    public String getTipo_Empleado() {
-        return Tipo_Empleado;
-    }
-
-    public void setTipo_Empleado(String tipo_Empleado) {
-        Tipo_Empleado = tipo_Empleado;
-    }
-
-    public String getFecha_Contratacion() {
-        return Fecha_Contratacion;
-    }
-
-    public void setFecha_Contratacion(String fecha_Contratacion) {
-        Fecha_Contratacion = fecha_Contratacion;
-    }
-
 }

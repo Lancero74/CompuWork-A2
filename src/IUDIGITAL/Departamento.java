@@ -1,43 +1,33 @@
-package IUDIGITAL;
+import java.util.ArrayList;
 
 public class Departamento {
     private int idDepartamento;
-    private String Nombre;
-    private String ListaEmpleados;
+    private String nombre;
+    private ArrayList<Empleado> listaEmpleados;
 
-// constructor
-public Departamento(int idDepartamento, String nombre, String listaEmpleados) {
+    public Departamento(int idDepartamento, String nombre) {
         this.idDepartamento = idDepartamento;
-        this.Nombre = nombre;
-        this.ListaEmpleados = listaEmpleados;
-
-    }
-// constructor vacio
-    public Departamento() {
-    }
-    
- // getters  and setters
-    public int getIdDepartamento() {
-        return idDepartamento;
-    }
-
-    public void setIdDepartamento(int idDepartamento) {
-        this.idDepartamento = idDepartamento;
+        this.nombre = nombre;
+        this.listaEmpleados = new ArrayList<>();
     }
 
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
-    public void setNombre(String nombre) {
-        Nombre = nombre;
+    public void asignarEmpleado(Empleado empleado) {
+        listaEmpleados.add(empleado);
+        empleado.asignarDepartamento(this);
     }
 
-    public String getListaEmpleados() {
-        return ListaEmpleados;
+    public void eliminarEmpleado(Empleado empleado) {
+        listaEmpleados.remove(empleado);
     }
 
-    public void setListaEmpleados(String listaEmpleados) {
-        ListaEmpleados = listaEmpleados;
+    public void visualizarEmpleados() {
+        System.out.println("Empleados en el departamento " + nombre + ":");
+        for (Empleado empleado : listaEmpleados) {
+            System.out.println(empleado);
+        }
     }
 }
