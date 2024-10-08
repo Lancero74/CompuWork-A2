@@ -1,57 +1,41 @@
+package IUDIGITAL;
+
+import java.util.ArrayList;
+
 public abstract class Empleado {
     protected int idEmpleado;
     protected String nombre;
-    protected String apellido;  // Nuevo atributo
-    protected String tipoEmpleado;
-    protected Departamento departamento;
+    protected String apellido;
+    protected String tipoEmpleado; // Permanente o Temporal
+    protected ArrayList<ReporteDesempenio> listaReportes; // Lista de reportes de desempeño
 
+    // Constructor
     public Empleado(int idEmpleado, String nombre, String apellido, String tipoEmpleado) {
         this.idEmpleado = idEmpleado;
         this.nombre = nombre;
-        this.apellido = apellido;  // Asignación del apellido
+        this.apellido = apellido;
         this.tipoEmpleado = tipoEmpleado;
+        this.listaReportes = new ArrayList<>(); // Inicializamos la lista de reportes
     }
 
-    public void asignarDepartamento(Departamento departamento) {
-        this.departamento = departamento;
+    // Agregar un reporte a la lista de reportes
+    public void agregarReporte(ReporteDesempenio reporte) {
+        listaReportes.add(reporte);
     }
 
-    public void cambiarDepartamento(Departamento nuevoDepartamento) {
-        this.departamento = nuevoDepartamento;
+    // Obtener la lista de reportes
+    public ArrayList<ReporteDesempenio> getListaReportes() {
+        return listaReportes;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    // Método abstracto para generar el reporte de desempeño
     public abstract void generarReporteDesempeño();
-
-    @Override
-    public String toString() {
-        return "ID: " + idEmpleado + ", Nombre: " + nombre + " " + apellido + ", Tipo: " + tipoEmpleado + ", Departamento: " + (departamento != null ? departamento.getNombre() : "Sin departamento");
-    }
-}
-
-class EmpleadoPermanente extends Empleado {
-    private double salario;
-
-    public EmpleadoPermanente(int idEmpleado, String nombre, String apellido, double salario) {
-        super(idEmpleado, nombre, apellido, "Permanente");
-        this.salario = salario;
-    }
-
-    @Override
-    public void generarReporteDesempeño() {
-        System.out.println("Generar reporte de desempeño para empleado permanente.");
-    }
-}
-
-class EmpleadoTemporal extends Empleado {
-    private double tarifaPorHora;
-
-    public EmpleadoTemporal(int idEmpleado, String nombre, String apellido, double tarifaPorHora) {
-        super(idEmpleado, nombre, apellido, "Temporal");
-        this.tarifaPorHora = tarifaPorHora;
-    }
-
-    @Override
-    public void generarReporteDesempeño() {
-        System.out.println("Generar reporte de desempeño para empleado temporal.");
-    }
 }
