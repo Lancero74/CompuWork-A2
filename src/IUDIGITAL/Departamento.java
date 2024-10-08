@@ -1,33 +1,38 @@
+import javax.swing.*;
 import java.util.ArrayList;
 
+// Clase que representa un departamento
 public class Departamento {
-    private int idDepartamento;
     private String nombre;
-    private ArrayList<Empleado> listaEmpleados;
+    private ArrayList<Empleado> empleados;
 
-    public Departamento(int idDepartamento, String nombre) {
-        this.idDepartamento = idDepartamento;
+    // Constructor
+    public Departamento(String nombre) {
         this.nombre = nombre;
-        this.listaEmpleados = new ArrayList<>();
+        this.empleados = new ArrayList<>();
     }
 
+    // Getters
     public String getNombre() {
         return nombre;
     }
 
-    public void asignarEmpleado(Empleado empleado) {
-        listaEmpleados.add(empleado);
-        empleado.asignarDepartamento(this);
+    // Método para agregar un empleado al departamento
+    public void agregarEmpleado(Empleado empleado) {
+        empleados.add(empleado);
     }
 
-    public void eliminarEmpleado(Empleado empleado) {
-        listaEmpleados.remove(empleado);
-    }
-
+    // Método para visualizar empleados en el departamento
     public void visualizarEmpleados() {
-        System.out.println("Empleados en el departamento " + nombre + ":");
-        for (Empleado empleado : listaEmpleados) {
-            System.out.println(empleado);
+        StringBuilder sb = new StringBuilder("Empleados en " + nombre + ":\n");
+        if (empleados.isEmpty()) {
+            sb.append("No hay empleados asignados.");
+        } else {
+            for (Empleado empleado : empleados) {
+                sb.append(empleado.toString()).append("\n");
+            }
         }
+        // Muestra la lista de empleados
+        JOptionPane.showMessageDialog(null, sb.toString());
     }
 }
