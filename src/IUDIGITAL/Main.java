@@ -1,149 +1,252 @@
+package IUDIGITAL;
+
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-public class Main {
+// Clase principal
+public class Main extends JFrame {
+    private ArrayList<Empleado> listaEmpleados;
+    private ArrayList<Departamento> listaDepartamentos;
+    private ArrayList<ReporteDesempenio> listaReportes;
+    private int contadorReportes = 1; // Contador para los reportes
 
-    // Clase SistemaGestionRRHH para gestionar Empleados y Departamentos
-    public static class SistemaGestionRRHH {
-        private ArrayList<Empleado> listaEmpleados;
-        private ArrayList<Departamento> listaDepartamentos;
+    // Constructor
+    public Main() {
+        listaEmpleados = new ArrayList<>();
+        listaDepartamentos = new ArrayList<>();
+        listaReportes = new ArrayList<>();
+        inicializarUI();
+    }
 
-        public SistemaGestionRRHH() {
-            listaEmpleados = new ArrayList<>();
-            listaDepartamentos = new ArrayList<>();
-        }
+    // Inicializa la interfaz de usuario
+    private void inicializarUI() {
+        setTitle("Sistema de Gestión de Recursos Humanos");
+        setSize(500, 400);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLayout(new FlowLayout());
 
-        public void gestionarEmpleados() {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Gestión de empleados:");
-            System.out.println("1. Crear empleado");
-            System.out.println("2. Visualizar empleados");
+        // Botones para gestionar empleados, departamentos y generar reportes
+        JButton btnGestionarEmpleados = new JButton("Gestionar Empleados");
+        JButton btnGestionarDepartamentos = new JButton("Gestionar Departamentos");
+        JButton btnGenerarReporte = new JButton("Generar Reporte");
+        JButton btnVisualizarReportes = new JButton("Visualizar Reportes");
 
-            int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consume el salto de línea
+        // Agregar acción a los botones
+        btnGestionarEmpleados.addActionListener(e -> gestionarEmpleados());
+        btnGestionarDepartamentos.addActionListener(e -> gestionarDepartamentos());
+        btnGenerarReporte.addActionListener(e -> generarReporte());
+        btnVisualizarReportes.addActionListener(e -> visualizarReportesEmpleado());
 
-            switch (opcion) {
-                case 1:
-                    crearEmpleado();
-                    break;
-                case 2:
-                    visualizarEmpleados();
-                    break;
-                default:
-                    System.out.println("Opción no válida");
-            }
-        }
+        // Añadir botones a la ventana
+        add(btnGestionarEmpleados);
+        add(btnGestionarDepartamentos);
+        add(btnGenerarReporte);
+        add(btnVisualizarReportes);
+    }
 
-        public void gestionarDepartamentos() {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Gestión de departamentos:");
-            System.out.println("1. Crear departamento");
-            System.out.println("2. Visualizar empleados en departamento");
+    // Método para gestionar empleados
+    private void gestionarEmpleados() {
+        String[] opciones = {"Crear Empleado", "Visualizar Empleados"};
+        int seleccion = JOptionPane.showOptionDialog(this, "Seleccione una opción:", "Gestión de Empleados",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones, opciones[0]);
 
-            int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consume el salto de línea
-
-            switch (opcion) {
-                case 1:
-                    crearDepartamento();
-                    break;
-                case 2:
-                    visualizarEmpleadosEnDepartamento();
-                    break;
-                default:
-                    System.out.println("Opción no válida");
-            }
-        }
-
-        private void crearEmpleado() {
-            Scanner scanner = new Scanner(System.in);
-
-            // Ingresar ID de empleado
-            System.out.println("Ingrese el ID del empleado:");
-            int idEmpleado = scanner.nextInt();
-            scanner.nextLine(); // Consume el salto de línea
-
-            // Ingresar nombre y apellido
-            System.out.println("Ingrese el nombre del empleado:");
-            String nombre = scanner.nextLine();
-            System.out.println("Ingrese el apellido del empleado:");
-            String apellido = scanner.nextLine();
-
-            // Elegir tipo de empleado
-            System.out.println("¿Es un empleado permanente o temporal? (1: Permanente, 2: Temporal)");
-            int tipo = scanner.nextInt();
-
-            if (tipo == 1) {
-                System.out.println("Ingrese el salario:");
-                double salario = scanner.nextDouble();
-                Empleado nuevoEmpleado = new EmpleadoPermanente(idEmpleado, nombre, apellido, salario);
-                listaEmpleados.add(nuevoEmpleado);
-            } else if (tipo == 2) {
-                System.out.println("Ingrese la tarifa por hora:");
-                double tarifaPorHora = scanner.nextDouble();
-                Empleado nuevoEmpleado = new EmpleadoTemporal(idEmpleado, nombre, apellido, tarifaPorHora);
-                listaEmpleados.add(nuevoEmpleado);
-            }
-
-            System.out.println("Empleado creado con éxito.");
-        }
-
-        private void visualizarEmpleados() {
-            System.out.println("Lista de empleados:");
-            for (Empleado empleado : listaEmpleados) {
-                System.out.println(empleado);
-            }
-        }
-
-        private void crearDepartamento() {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Ingrese el nombre del departamento:");
-            String nombre = scanner.nextLine();
-            Departamento nuevoDepartamento = new Departamento(listaDepartamentos.size() + 1, nombre);
-            listaDepartamentos.add(nuevoDepartamento);
-            System.out.println("Departamento creado con éxito.");
-        }
-
-        private void visualizarEmpleadosEnDepartamento() {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Ingrese el ID del departamento:");
-            int idDepartamento = scanner.nextInt();
-
-            Departamento departamento = listaDepartamentos.get(idDepartamento - 1);
-            departamento.visualizarEmpleados();
+        if (seleccion == 0) {
+            crearEmpleado();
+        } else if (seleccion == 1) {
+            visualizarEmpleados();
         }
     }
 
-    // Método main
-    public static void main(String[] args) {
-        SistemaGestionRRHH sistema = new SistemaGestionRRHH();
+    // Método para crear un empleado
+    private void crearEmpleado() {
+        int idEmpleado = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID del empleado:"));
+        String nombre = JOptionPane.showInputDialog("Ingrese el nombre del empleado:");
+        String apellido = JOptionPane.showInputDialog("Ingrese el apellido del empleado:");
+        String tipo = JOptionPane.showInputDialog("¿Es un empleado permanente o temporal? (P/T)");
 
-        Scanner scanner = new Scanner(System.in);
-        boolean continuar = true;
-
-        while (continuar) {
-            System.out.println("Sistema de Gestión de RRHH:");
-            System.out.println("1. Gestionar empleados");
-            System.out.println("2. Gestionar departamentos");
-            System.out.println("3. Salir");
-
-            int opcion = scanner.nextInt();
-
-            switch (opcion) {
-                case 1:
-                    sistema.gestionarEmpleados();
-                    break;
-                case 2:
-                    sistema.gestionarDepartamentos();
-                    break;
-                case 3:
-                    continuar = false;
-                    break;
-                default:
-                    System.out.println("Opción no válida.");
-            }
+        if (tipo.equalsIgnoreCase("P")) {
+            double salario = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el salario:"));
+            listaEmpleados.add(new EmpleadoPermanente(idEmpleado, nombre, apellido, salario));
+        } else if (tipo.equalsIgnoreCase("T")) {
+            double tarifaPorHora = Double.parseDouble(JOptionPane.showInputDialog("Ingrese la tarifa por hora:"));
+            listaEmpleados.add(new EmpleadoTemporal(idEmpleado, nombre, apellido, tarifaPorHora));
         }
 
-        System.out.println("Saliendo del sistema...");
+        // Asignar el empleado a un departamento
+        asignarEmpleadoADepartamento(idEmpleado);
+
+        JOptionPane.showMessageDialog(this, "Empleado creado y asignado a un departamento con éxito.");
+    }
+
+    // Método para asignar empleado a un departamento
+    private void asignarEmpleadoADepartamento(int idEmpleado) {
+        if (listaDepartamentos.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay departamentos creados. Cree un departamento primero.");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder("Departamentos disponibles:\n");
+        for (int i = 0; i < listaDepartamentos.size(); i++) {
+            sb.append((i + 1)).append(". ").append(listaDepartamentos.get(i).getNombre()).append("\n");
+        }
+
+        String input = JOptionPane.showInputDialog(sb.toString() + "Seleccione el número del departamento al que desea asignar el empleado:");
+        int indiceDepartamento = Integer.parseInt(input) - 1;
+
+        if (indiceDepartamento >= 0 && indiceDepartamento < listaDepartamentos.size()) {
+            Departamento departamentoSeleccionado = listaDepartamentos.get(indiceDepartamento);
+
+            // Buscar empleado por ID
+            Empleado empleado = null;
+            for (Empleado e : listaEmpleados) {
+                if (e.idEmpleado == idEmpleado) {
+                    empleado = e;
+                    break;
+                }
+            }
+
+            if (empleado != null) {
+                departamentoSeleccionado.agregarEmpleado(empleado);
+                JOptionPane.showMessageDialog(this, "Empleado asignado al departamento: " + departamentoSeleccionado.getNombre());
+            } else {
+                JOptionPane.showMessageDialog(this, "Empleado no encontrado.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Departamento no válido.");
+        }
+    }
+
+    // Método para visualizar empleados
+    private void visualizarEmpleados() {
+        StringBuilder sb = new StringBuilder("Lista de empleados:\n");
+        for (Empleado empleado : listaEmpleados) {
+            sb.append(empleado.toString()).append("\n");
+        }
+        JOptionPane.showMessageDialog(this, sb.toString());
+    }
+
+    // Método para gestionar departamentos
+    private void gestionarDepartamentos() {
+        String[] opciones = {"Crear Departamento", "Visualizar Empleados en Departamento"};
+        int seleccion = JOptionPane.showOptionDialog(this, "Seleccione una opción:", "Gestión de Departamentos",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones, opciones[0]);
+
+        if (seleccion == 0) {
+            crearDepartamento();
+        } else if (seleccion == 1) {
+            visualizarEmpleadosEnDepartamento();
+        }
+    }
+
+    // Método para crear un departamento
+    private void crearDepartamento() {
+        String nombre = JOptionPane.showInputDialog("Ingrese el nombre del departamento:");
+        listaDepartamentos.add(new Departamento(nombre));
+        JOptionPane.showMessageDialog(this, "Departamento creado con éxito.");
+    }
+
+    // Método para visualizar empleados en un departamento
+    private void visualizarEmpleadosEnDepartamento() {
+        if (listaDepartamentos.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay departamentos creados.");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder("Departamentos disponibles:\n");
+        for (int i = 0; i < listaDepartamentos.size(); i++) {
+            sb.append((i + 1)).append(". ").append(listaDepartamentos.get(i).getNombre()).append("\n");
+        }
+
+        String input = JOptionPane.showInputDialog(sb.toString() + "Seleccione el número del departamento:");
+        int indice = Integer.parseInt(input) - 1;
+
+        if (indice >= 0 && indice < listaDepartamentos.size()) {
+            listaDepartamentos.get(indice).visualizarEmpleados();
+        } else {
+            JOptionPane.showMessageDialog(this, "Departamento no válido.");
+        }
+    }
+
+    // Método para generar reportes
+    private void generarReporte() {
+        if (listaEmpleados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay empleados registrados.");
+            return;
+        }
+
+        // Mostrar lista de empleados disponibles
+        StringBuilder sb = new StringBuilder("Empleados disponibles:\n");
+        for (int i = 0; i < listaEmpleados.size(); i++) {
+            sb.append((i + 1)).append(". ").append(listaEmpleados.get(i).getNombre()).append(" ").append(listaEmpleados.get(i).getApellido()).append("\n");
+        }
+
+        // Seleccionar empleado
+        String input = JOptionPane.showInputDialog(sb.toString() + "Seleccione el número del empleado:");
+        int indice = Integer.parseInt(input) - 1;
+
+        if (indice >= 0 && indice < listaEmpleados.size()) {
+            Empleado empleadoSeleccionado = listaEmpleados.get(indice);
+
+            // Pedir las métricas del reporte
+            String metricas = JOptionPane.showInputDialog("Ingrese las métricas del desempeño:");
+
+            // Crear un nuevo reporte de desempeño
+            ReporteDesempenio nuevoReporte = new ReporteDesempenio(listaReportes.size() + 1, empleadoSeleccionado, metricas);
+
+            // Agregar el reporte a la lista del empleado seleccionado
+            empleadoSeleccionado.agregarReporte(nuevoReporte);
+
+            // Agregar el reporte a la lista general de reportes (opcional)
+            listaReportes.add(nuevoReporte);
+
+            JOptionPane.showMessageDialog(this, "Reporte generado correctamente para " + empleadoSeleccionado.getNombre() + " " + empleadoSeleccionado.getApellido());
+        } else {
+            JOptionPane.showMessageDialog(this, "Empleado no válido.");
+        }
+    }
+
+
+    // Método para visualizar reportes de un empleado
+    private void visualizarReportesEmpleado() {
+        if (listaEmpleados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay empleados registrados.");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder("Empleados disponibles:\n");
+        for (int i = 0; i < listaEmpleados.size(); i++) {
+            sb.append((i + 1)).append(". ").append(listaEmpleados.get(i).getNombre()).append(" ").append(listaEmpleados.get(i).getApellido()).append("\n");
+        }
+
+        String input = JOptionPane.showInputDialog(sb.toString() + "Seleccione el número del empleado:");
+        int indice = Integer.parseInt(input) - 1;
+
+        if (indice >= 0 && indice < listaEmpleados.size()) {
+            Empleado empleadoSeleccionado = listaEmpleados.get(indice);
+
+            if (empleadoSeleccionado.getListaReportes().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El empleado no tiene reportes disponibles.");
+                return;
+            }
+
+            StringBuilder reporteSb = new StringBuilder("Reportes del empleado:\n");
+            for (ReporteDesempenio reporte : empleadoSeleccionado.getListaReportes()) {
+                reporteSb.append(reporte.toString()).append("\n");
+            }
+
+            JOptionPane.showMessageDialog(this, reporteSb.toString());
+        } else {
+            JOptionPane.showMessageDialog(this, "Empleado no válido.");
+        }
+    }
+
+    // Método principal
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            Main mainApp = new Main();
+            mainApp.setVisible(true);
+        });
     }
 }
